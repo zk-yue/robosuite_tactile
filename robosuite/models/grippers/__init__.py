@@ -12,6 +12,8 @@ from .robotiq_140_gripper import Robotiq140Gripper
 from .wiping_gripper import WipingGripper
 from .null_gripper import NullGripper
 
+from .robotiq_85_gripper_tactile import Robotiq85GripperTactile
+
 
 GRIPPER_MAPPING = {
     "RethinkGripper": RethinkGripper,
@@ -23,6 +25,8 @@ GRIPPER_MAPPING = {
     "Robotiq140Gripper": Robotiq140Gripper,
     "RobotiqThreeFingerGripper": RobotiqThreeFingerGripper,
     "RobotiqThreeFingerDexterousGripper": RobotiqThreeFingerDexterousGripper,
+
+    "Robotiq85GripperTactile": Robotiq85GripperTactile,
     None: NullGripper,
 }
 
