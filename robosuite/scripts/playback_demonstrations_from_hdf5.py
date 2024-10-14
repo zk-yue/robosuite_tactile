@@ -21,12 +21,17 @@ import random
 import h5py
 import numpy as np
 
+import sys
+
+sys.path.append('/home/yuezk/yzk/robosuite_tactile')
+print(sys.path)
 import robosuite
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--folder",
+        default="/home/yuezk/yzk/robosuite_tactile/robosuite/models/assets/demonstrations/lift/",
         type=str,
         help="Path to your demonstration folder that contains the demo.hdf5 file, e.g.: "
         "'path_to_assets_dir/demonstrations/YOUR_DEMONSTRATION'",
