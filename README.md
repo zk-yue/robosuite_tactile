@@ -1,47 +1,38 @@
-# robosuite
+# 1 触觉传感器添加
 
-![gallery of_environments](docs/images/gallery.png)
+重点注意以下几点：
 
-[**[Homepage]**](https://robosuite.ai/) &ensp; [**[White Paper]**](https://arxiv.org/abs/2009.12293) &ensp; [**[Documentations]**](https://robosuite.ai/docs/overview.html) &ensp; [**[ARISE Initiative]**](https://github.com/ARISE-Initiative)
+1. mesh的名字及分组：参与碰撞的物体后缀增加“\_collision”，设置group="0"；可以看到的物体后缀增加“\_visual”，group="1"。
+2. 不参与碰撞的物体，设置contype="0" conaffinity="0"。
 
--------
-## Latest Updates
-- [11/15/2022] **v1.4**: Backend migration to DeepMind's official [MuJoCo Python binding](https://github.com/deepmind/mujoco), robot textures, and bug fixes :robot: [[release notes]](https://github.com/ARISE-Initiative/robosuite/releases/tag/v1.4.0) [[documentation]](http://robosuite.ai/docs/v1.4/)
-
-- [10/19/2021] **v1.3**: Ray tracing and physically based rendering tools :sparkles: and access to additional vision modalities 🎥 [[video spotlight]](https://www.youtube.com/watch?v=2xesly6JrQ8) [[release notes]](https://github.com/ARISE-Initiative/robosuite/releases/tag/v1.3) [[documentation]](http://robosuite.ai/docs/v1.3/)
-
-- [02/17/2021] **v1.2**: Added observable sensor models :eyes: and dynamics randomization :game_die: [[release notes]](https://github.com/ARISE-Initiative/robosuite/releases/tag/v1.2)
-
-- [12/17/2020] **v1.1**: Refactored infrastructure and standardized model classes for much easier environment prototyping :wrench: [[release notes]](https://github.com/ARISE-Initiative/robosuite/releases/tag/v1.1)
-
--------
-
-**robosuite** is a simulation framework powered by the [MuJoCo](http://mujoco.org/) physics engine for robot learning. It also offers a suite of benchmark environments for reproducible research. The current release (v1.4) features long-term support with the official MuJoCo binding from DeepMind. This project is part of the broader [Advancing Robot Intelligence through Simulated Environments (ARISE) Initiative](https://github.com/ARISE-Initiative), with the aim of lowering the barriers of entry for cutting-edge research at the intersection of AI and Robotics.
-
-Data-driven algorithms, such as reinforcement learning and imitation learning, provide a powerful and generic tool in robotics. These learning paradigms, fueled by new advances in deep learning, have achieved some exciting successes in a variety of robot control problems. However, the challenges of reproducibility and the limited accessibility of robot hardware (especially during a pandemic) have impaired research progress. The overarching goal of **robosuite** is to provide researchers with:
-
-* a standardized set of benchmarking tasks for rigorous evaluation and algorithm development;
-* a modular design that offers great flexibility to design new robot simulation environments;
-* a high-quality implementation of robot controllers and off-the-shelf learning algorithms to lower the barriers to entry.
-
-This framework was originally developed since late 2017 by researchers in [Stanford Vision and Learning Lab](http://svl.stanford.edu) (SVL) as an internal tool for robot learning research. Now it is actively maintained and used for robotics research projects in SVL and the [UT Robot Perception and Learning Lab](http://rpl.cs.utexas.edu) (RPL). We welcome community contributions to this project. For details please check out our [contributing guidelines](CONTRIBUTING.md).
-
-This release of **robosuite** contains seven robot models, eight gripper models, six controller modes, and nine standardized tasks. It also offers a modular design of APIs for building new environments with procedural generation. We highlight these primary features below:
-
-* **standardized tasks**: a set of standardized manipulation tasks of large diversity and varying complexity and RL benchmarking results for reproducible research;
-* **procedural generation**: modular APIs for programmatically creating new environments and new tasks as combinations of robot models, arenas, and parameterized 3D objects;
-* **robot controllers**: a selection of controller types to command the robots, such as joint-space velocity control, inverse kinematics control, operational space control, and 3D motion devices for teleoperation;
-* **multi-modal sensors**: heterogeneous types of sensory signals, including low-level physical states, RGB cameras, depth maps, and proprioception;
-* **human demonstrations**: utilities for collecting human demonstrations, replaying demonstration datasets, and leveraging demonstration data for learning. Check out our sister project [robomimic](https://arise-initiative.github.io/robomimic-web/);
-* **photorealistic rendering**: integration with advanced graphics tools that provide real-time photorealistic renderings of simulated scenes.
-
-## Citation
-Please cite [**robosuite**](https://robosuite.ai) if you use this framework in your publications:
-```bibtex
-@inproceedings{robosuite2020,
-  title={robosuite: A Modular Simulation Framework and Benchmark for Robot Learning},
-  author={Yuke Zhu and Josiah Wong and Ajay Mandlekar and Roberto Mart\'{i}n-Mart\'{i}n and Abhishek Joshi and Soroush Nasiriany and Yifeng Zhu},
-  booktitle={arXiv preprint arXiv:2009.12293},
-  year={2020}
-}
+```xml
+<!-- tactile -->
+<body name="digit_0" pos="-0.0025 0.01 0.08" euler="1.5708 0 -1.5708"> 
+<!-- 左右 前后 上下 -->
+    <!-- <include file="digit0_sensor.xml"></include> -->
+    <body name="digit0_sensor" pos="0 0 0" euler="0 0 0">
+        <site name="digit0_site" pos="0.012 0 0.035" rgba="1 0 0 .0" size="0.02 0.02 0.02" group="1"/>
+        <!-- <joint name="digit_joint" type="hinge" damping="0.01"></joint> -->
+        <!--Front and Back-->
+        <geom type="mesh" group="0" name="digit0_back_collision" euler="3.1416 0 1.5708" pos="0.028 0.015 0.036" material="black_resin" mesh="digit_back"  mass="0.05" friction="1 0.05 0.01"/>
+        <geom type="mesh" contype="0" conaffinity="0" group="1" name="digit0_back_visual" material="black_resin"  mesh="digit_back" mass="0.0005" euler="3.1416 0 1.5708" pos="0.028 0.015 0.036"/>
+        <!-- <geom name="digit0_adapter"  type="mesh" euler="0 -1.5708 3.1416" pos="0.05 0.0097 0.0326" material="silver" mesh="digit_adapter"  mass="0.05" contype="32" conaffinity="32" friction="1 0.05 0.01" solimp="1.1 1.2 0.001 0.5 2" solref="0.02 1"/> -->
+        <!--Glass Cover-->
+        <geom type="mesh" contype="0" conaffinity="0" group="1" name="digit0_glass_visual" material="transparent_glass"  mesh="digit_glass" mass="0.005"   pos="0.024 -0.0085 0.017" euler="0 0 1.5708"/>
+        <!--Elastomer-->
+        <geom type="mesh" contype="0" conaffinity="0" group="1" name="digit0_elastomer_visual" mesh="digit_gel" pos="0.024 -0.0085 0.032" euler="0 0 1.5708" rgba="0.9 0.95 1 0.0"/>
+        <!--Elastomer Cover-->
+        <!-- <geom name="digit0_elastCover" type="mesh" mesh="digit_gel_cover" pos="0.025 -0.01 0.031" euler="0 0 1.5708" contype="0" conaffinity="0" material="silver"
+                friction="1 0.05 0.01" solimp="1.1 1.2 0.001 0.5 2" solref="0.02 1"/> -->
+        <geom type="mesh" contype="0" conaffinity="0" group="1" name="digit0_elastCover_visual" mesh="digit_curve" pos="0.024 -0.0083 0.0305" euler="0 0 1.5708" material="silver"
+            friction="1 0.05 0.01" solimp="1.1 1.2 0.001 0.5 2" solref="0.02 1"/>
+        <!--Gel Camera-->
+        <camera name="digit0_camera" mode="fixed" pos="0.0129 0.0014 0.008" euler="0 3.14159 1.5708" fovy="30"/>
+        <!-- <site name="digit0_pos" type="sphere" pos="0.0129 0.0014 0.008" rgba="1 0 1 1" size=".008 .008 .008"/> -->
+        <!-- Friction placeholder -->
+        <geom name="digit0_friction_collision" group="0" type="box" size="0.013 0.013 0.00001" euler="0 0 0" pos="0.012 0.001 0.0372" rgba="0 0 1 0"
+                friction="1 0.05 0.01"/>
+    </body>
+</body>
+<!-- tactile -->
 ```
